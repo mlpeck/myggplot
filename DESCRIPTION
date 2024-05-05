@@ -1,0 +1,13 @@
+Package: myggplot
+Type: Package
+Title: Miscellaneous useful plotting functions mostly using ggplot2
+Version: 0.1.0
+Date: 2024-05-04
+Author: M.L. Peck
+Maintainer: M.L. Peck <mlpeck54@gmail.com>
+Description: Mostly ggplot2 based plotting functions. 
+  Main function is qplot() without the annoying deprecated warnings.
+Depends: ggplot2, rlang
+Suggests: viridisLite
+License: MIT | gpl
+RoxygenNote: 7.2.3
