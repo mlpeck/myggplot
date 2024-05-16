@@ -1,3 +1,8 @@
+## Note: adapted from the function of the same name in package ggplot2
+## Author of record is ggplot2 core developer team
+## Copyright the authors
+## License: MIT 
+
 #' my pilfered `qplot`
 #'
 #' ggplot2's qplot function without the annoying deprecated warnings
