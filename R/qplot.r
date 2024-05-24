@@ -81,7 +81,7 @@ qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE, geom = "auto
         }
         else if (missing(y)) {
             x <- eval_tidy(mapping$x, data, caller_env)
-            if (is.discrete(x)) {
+            if (ggplot2:::is.discrete(x)) {
                 geom[geom == "auto"] <- "bar"
             }
             else {
