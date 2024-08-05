@@ -12,6 +12,7 @@
 #' @param col        color palette. Defaults to viridis(256)
 #' @param xlab       x axis label
 #' @param ylab       y axis label
+#' @param show.legend display legend?
 #' @param legend     label for legend
 #' @param title      main graph title
 #' @param xrev       if `TRUE` reverse X axis
@@ -24,7 +25,8 @@
 #'
 ggimage <- function(zmat, x=NULL, y=NULL, zlim=range(zmat, na.rm=TRUE),
                     col=viridisLite::viridis(256),
-                    xlab=NULL, ylab=NULL, legend=NULL, title=NULL,
+                    xlab=NULL, ylab=NULL, 
+                    show.legend=TRUE, legend=NULL, title=NULL,
                     xrev=FALSE, yrev=FALSE, asp=1,
                     addcontour=FALSE, binwidth=NULL
                    ) {
@@ -39,7 +41,7 @@ ggimage <- function(zmat, x=NULL, y=NULL, zlim=range(zmat, na.rm=TRUE),
     df <- data.frame(cbind(xy, as.vector(zmat)))
     names(df) <- c("x","y","z")
     g1 <- ggplot(df, aes(x=x, y=y, z=z)) + 
-        geom_raster(aes(fill=z)) + 
+        geom_raster(aes(fill=z), show.legend=show.legend) + 
         scale_fill_gradientn(colors=col, na.value="#FFFFFF00", limits=zlim) +
         coord_fixed(ratio = asp)
     if (addcontour) {

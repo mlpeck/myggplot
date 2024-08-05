@@ -8,9 +8,11 @@ ggimage(
   zmat,
   x = NULL,
   y = NULL,
+  zlim = range(zmat, na.rm = TRUE),
   col = viridisLite::viridis(256),
   xlab = NULL,
   ylab = NULL,
+  show.legend = TRUE,
   legend = NULL,
   title = NULL,
   xrev = FALSE,
@@ -27,11 +29,15 @@ ggimage(
 
 \item{y}{y axis values or NULL}
 
+\item{zlim}{range of z values to display}
+
 \item{col}{color palette. Defaults to viridis(256)}
 
 \item{xlab}{x axis label}
 
 \item{ylab}{y axis label}
+
+\item{show.legend}{display legend?}
 
 \item{legend}{label for legend}
 

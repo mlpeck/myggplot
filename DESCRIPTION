@@ -10,4 +10,4 @@ Description: Mostly ggplot2 based plotting functions.
 Depends: ggplot2, rlang
 Suggests: viridisLite
 License: MIT | gpl
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
