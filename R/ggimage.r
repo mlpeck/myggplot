@@ -8,6 +8,7 @@
 #' @param zmat       the matrix to display
 #' @param x          x axis values -- either a vector the same length as number of rows or a matrix with the same dimensions as `zmat`
 #' @param y          y axis values or NULL
+#' @param zlim       range of z values to display
 #' @param col        color palette. Defaults to viridis(256)
 #' @param xlab       x axis label
 #' @param ylab       y axis label
@@ -21,7 +22,8 @@
 #'
 #' @return data frame constructed to build plot and the graph, invisibly in a list
 #'
-ggimage <- function(zmat, x=NULL, y=NULL, col=viridisLite::viridis(256),
+ggimage <- function(zmat, x=NULL, y=NULL, zlim=range(zmat, na.rm=TRUE),
+                    col=viridisLite::viridis(256),
                     xlab=NULL, ylab=NULL, legend=NULL, title=NULL,
                     xrev=FALSE, yrev=FALSE, asp=1,
                     addcontour=FALSE, binwidth=NULL
@@ -38,7 +40,7 @@ ggimage <- function(zmat, x=NULL, y=NULL, col=viridisLite::viridis(256),
     names(df) <- c("x","y","z")
     g1 <- ggplot(df, aes(x=x, y=y, z=z)) + 
         geom_raster(aes(fill=z)) + 
-        scale_fill_gradientn(colors=col, na.value="#FFFFFF00") +
+        scale_fill_gradientn(colors=col, na.value="#FFFFFF00", limits=zlim) +
         coord_fixed(ratio = asp)
     if (addcontour) {
         if (!is.null(binwidth)) {
