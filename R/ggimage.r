@@ -5,7 +5,7 @@
 #' `zmat` is the maatrix to display. All other arguments are optional
 #' with mostly `NULL` defaults
 #'
-#' @param zmat       the matrix to display
+#' @param zmat       either the matrix to display or a names list with elements ra, dec, and zmat
 #' @param x          x axis values -- either a vector the same length as number of rows or a matrix with the same dimensions as `zmat`
 #' @param y          y axis values or NULL
 #' @param zlim       range of z values to display
@@ -31,11 +31,17 @@ ggimage <- function(zmat, x=NULL, y=NULL, zlim=range(zmat, na.rm=TRUE),
                     addcontour=FALSE, binwidth=NULL
                    ) {
     require(ggplot2)
+    if (is.list(zmat)) {
+        x <- zmat$ra
+        y <- zmat$dec
+        zmat <- zmat$zmat
+        xrev <- TRUE
+    }
     if (is.null(x)) x <- 1:nrow(zmat)
     if (is.null(y)) y <- 1:ncol(zmat)
     if (!is.null(dim(x))) {
-      x <- colMeans(x)
-      y <- rowMeans(y)
+      x <- rowMeans(x)
+      y <- colMeans(y)
     }
     xy <- expand.grid(x,y)
     df <- data.frame(cbind(xy, as.vector(zmat)))

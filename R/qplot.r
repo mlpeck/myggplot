@@ -32,8 +32,9 @@
 #' y <- x + rnorm(100, sd=0.1)
 #' qplot(x, y, main="Fake data")
 #'
-qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE, geom = "auto", 
-                   xlim = c(NA, NA), ylim = c(NA, NA), log = "", main = NULL, 
+qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE,
+                   geom = "auto", xlim = c(NA, NA),
+                   ylim = c(NA, NA), log = "", main = NULL,
                    xlab = NULL, ylab = NULL, asp = NA) {
     
     require(ggplot2)
@@ -43,27 +44,33 @@ qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE, geom = "auto
     if (!is.character(geom)) {
         stop("geom must be character")
     }
-    exprs <- enquos(x = x, y = y, ...)
-    is_missing <- vapply(exprs, quo_is_missing, logical(1))
+    exprs <- rlang::enquos(x = x, y = y, ...)
+    is_missing <- vapply(exprs, rlang::quo_is_missing, logical(1))
+
     is_constant <- (!names(exprs) %in% ggplot2:::ggplot_global$all_aesthetics) | 
-    vapply(exprs, quo_is_call, logical(1), name = "I")
-    mapping <- ggplot2:::new_aes(exprs[!is_missing & !is_constant], env = caller_env)
+                    vapply(exprs, rlang::quo_is_call, logical(1), name = "I")
+
+    mapping <- ggplot2::class_mapping(exprs[!is_missing & !is_constant], env = caller_env)
+
     consts <- exprs[is_constant]
+
     aes_names <- names(mapping)
+    mapping <- ggplot2:::rename_aes(mapping)
+
     if (is.null(xlab)) {
-        if (quo_is_missing(exprs$x)) {
+        if (rlang::quo_is_missing(exprs$x)) {
             xlab <- ""
         }
         else {
-            xlab <- as_label(exprs$x)
+            xlab <- rlang::as_label(exprs$x)
         }
     }
     if (is.null(ylab)) {
-        if (quo_is_missing(exprs$y)) {
+        if (rlang::quo_is_missing(exprs$y)) {
             ylab <- ""
         }
         else {
-            ylab <- as_label(exprs$y)
+            ylab <- rlang::as_label(exprs$y)
         }
     }
     if (missing(data)) {
@@ -80,7 +87,7 @@ qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE, geom = "auto
             geom[geom == "auto"] <- "qq"
         }
         else if (missing(y)) {
-            x <- eval_tidy(mapping$x, data, caller_env)
+            x <- rlang::eval_tidy(mapping$x, data, caller_env)
             if (ggplot2:::is.discrete(x)) {
                 geom[geom == "auto"] <- "bar"
             }
@@ -92,12 +99,14 @@ qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE, geom = "auto
         }
         else {
             if (missing(x)) {
-                mapping$x <- quo(seq_along(!!mapping$y))
+                mapping$x <- rlang::quo(seq_along(!!mapping$y))
             }
             geom[geom == "auto"] <- "point"
         }
     }
+
     p <- ggplot(data, mapping, environment = caller_env)
+
     if (is.null(facets)) {
         p <- p + facet_null()
     }
@@ -107,27 +116,26 @@ qplot <- function (x, y, ..., data, facets = NULL, margins = FALSE, geom = "auto
     else {
         p <- p + facet_grid(rows = deparse(facets), margins = margins)
     }
-    if (!is.null(main)) 
-        p <- p + ggtitle(main)
-        for (g in geom) {
-            params <- lapply(consts, eval_tidy)
-            p <- p + do.call(paste0("geom_", g), params)
-        }
-        logv <- function(var) var %in% strsplit(log, "")[[1]]
-    if (logv("x")) 
-        p <- p + scale_x_log10()
-    if (logv("y")) 
-        p <- p + scale_y_log10()
-    if (!is.na(asp)) 
-        p <- p + theme(aspect.ratio = asp)
-    if (!missing(xlab)) 
-        p <- p + xlab(xlab)
-    if (!missing(ylab)) 
-        p <- p + ylab(ylab)
-    if (!missing(xlim) && !all(is.na(xlim))) 
-        p <- p + xlim(xlim)
-    if (!missing(ylim) && !all(is.na(ylim))) 
-        p <- p + ylim(ylim)
+    if (!is.null(main)) p <- p + ggtitle(main)
+
+    for (g in geom) {
+        params <- lapply(consts, eval_tidy)
+        p <- p + do.call(paste0("geom_", g), params)
+    }
+
+    logv <- function(var) var %in% strsplit(log, "")[[1]]
+
+    if (logv("x")) p <- p + scale_x_log10()
+    if (logv("y")) p <- p + scale_y_log10()
+
+    if (!is.na(asp)) p <- p + theme(aspect.ratio = asp)
+
+    if (!missing(xlab)) p <- p + xlab(xlab)
+    if (!missing(ylab)) p <- p + ylab(ylab)
+
+    if (!missing(xlim) && !all(is.na(xlim))) p <- p + xlim(xlim)
+    if (!missing(ylim) && !all(is.na(ylim))) p <- p + ylim(ylim)
+
     p
 }
                    
