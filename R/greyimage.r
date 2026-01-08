@@ -15,7 +15,9 @@ gray256 <- grey256
 #'
 #' The color palette defaults to 256 level grayscale, but can be anything
 #'
-#' @param img    matrix to be displayed
+#' @param zmat   matrix to be displayed, or a named list with the image, x coordinates, y coordinates
+#' @param x      vector of x coordinates
+#' @param y      vector of y coordinates
 #' @param col    color palette
 #' @param xlab   X axis label
 #' @param ylab   Y axis label
@@ -23,10 +25,18 @@ gray256 <- grey256
 #'
 #' @aliases grayimage
 #'
-greyimage <- function(img, col=grey256, xlab="X", ylab="Y", ...) {
-  nr <- nrow(img)
-  nc <- ncol(img)
-  image(1:nr, 1:nc, img, col=col, useRaster=TRUE, asp=1, xlab=xlab, ylab=ylab, ...)
+greyimage <- function(zmat, x=NULL, y=NULL, col=grey256, xlab="X", ylab="Y", ...) {
+
+  if (is.list(zmat)) {
+    x <- zmat[[2]]
+    y <- zmat[[3]]
+    xlab <- names(zmat)[2]
+    ylab <- names(zmat)[3]
+    zmat <- zmat[[1]]
+  }
+  if (is.null(x)) x <-1:nrow(img)
+  if (is.null(y)) y <- 1:ncol(img)
+  image(x, y, img, col=col, useRaster=TRUE, asp=1, xlab=xlab, ylab=ylab, ...)
 }
 
 grayimage <- greyimage

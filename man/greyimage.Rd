@@ -5,10 +5,22 @@
 \alias{grayimage}
 \title{base graphics raster image}
 \usage{
-greyimage(img, col = grey256, xlab = "X", ylab = "Y", ...)
+greyimage(
+  zmat,
+  x = NULL,
+  y = NULL,
+  col = grey(seq(0, 1, length = 256)),
+  xlab = "X",
+  ylab = "Y",
+  ...
+)
 }
 \arguments{
-\item{img}{matrix to be displayed}
+\item{zmat}{matrix to be displayed, or a named list with the image, x coordinates, y coordinates}
+
+\item{x}{vector of x coordinates}
+
+\item{y}{vector of y coordinates}
 
 \item{col}{color palette}
 

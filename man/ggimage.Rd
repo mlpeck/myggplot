@@ -23,7 +23,7 @@ ggimage(
 )
 }
 \arguments{
-\item{zmat}{the matrix to display}
+\item{zmat}{either the matrix to display or a names list with elements ra, dec, and zmat}
 
 \item{x}{x axis values -- either a vector the same length as number of rows or a matrix with the same dimensions as `zmat`}
 
