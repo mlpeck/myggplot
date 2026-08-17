@@ -34,9 +34,9 @@ greyimage <- function(zmat, x=NULL, y=NULL, col=grey256, xlab="X", ylab="Y", ...
     ylab <- names(zmat)[3]
     zmat <- zmat[[1]]
   }
-  if (is.null(x)) x <-1:nrow(img)
-  if (is.null(y)) y <- 1:ncol(img)
-  image(x, y, img, col=col, useRaster=TRUE, asp=1, xlab=xlab, ylab=ylab, ...)
+  if (is.null(x)) x <- 1:nrow(zmat)
+  if (is.null(y)) y <- 1:ncol(zmat)
+  image(x, y, zmat, col=col, useRaster=TRUE, asp=1, xlab=xlab, ylab=ylab, ...)
 }
 
 grayimage <- greyimage
